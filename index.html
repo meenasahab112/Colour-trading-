@@ -314,6 +314,55 @@
             document.getElementById('timer').innerText = "00:" + sec;
         }, 1000);
     </script>
+<!-- Supabase Connection Script -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  const SUPABASE_URL = "https://hedcasrjbvgjnfdwvaht.supabase.co";
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhlZGNhc3JqYnZnam5mZHd2YWh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA5NDE5NTEsImV4cCI6MjEwNjUxNzk1MX0.11SsZUH8A72eIkLiMtnO5Gi8vfmcDk563zb5s0CGHVc";
+  
+  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  async function handleAuth() {
+      const phone = document.getElementById('loginPhone').value;
+      const pass = document.getElementById('loginPass').value;
+
+      if(phone.length < 10 || pass.length < 4) {
+          alert('10-digit Phone aur sahi Password dalein!');
+          return;
+      }
+
+      // Database me check karein
+      let { data: user, error } = await supabase
+          .from('users')
+          .select('*')
+          .eq('phone', phone)
+          .single();
+
+      if (!user) {
+          // Naya user banayein
+          let { data: newUser, error: regErr } = await supabase
+              .from('users')
+              .insert([{ phone: phone, password: pass, balance: 0 }])
+              .select()
+              .single();
+
+          if (regErr) { alert('Registration fail hua!'); return; }
+          user = newUser;
+      } else if (user.password !== pass) {
+          alert('Password galat hai!');
+          return;
+      }
+
+      // Login Successful
+      document.getElementById('authScreen').style.display = 'none';
+      document.getElementById('mainLobby').style.display = 'block';
+      document.getElementById('offerModal').style.display = 'flex';
+      document.getElementById('userPhoneDisplay').innerText = 'ID: ' + phone.substring(0, 2) + '****' + phone.substring(6);
+      document.getElementById('userBalance').innerText = Number(user.balance).toFixed(2);
+  }
+</script>
+    
 </body>
                     </html>
                     
