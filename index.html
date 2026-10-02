@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP Gaming Lobby</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #0f0202;
+            color: #ffffff;
+            min-height: 100vh;
+            padding-bottom: 30px;
+        }
+
+        /* Top Header / Navigation */
+        .header {
+            background: linear-gradient(180deg, #3a0000 0%, #150000 100%);
+            border-bottom: 2px solid #ff2a2a;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff3333;
+            text-shadow: 0 0 10px #ff0000;
+        }
+
+        .wallet-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .wallet-badge {
+            background: #2b0000;
+            border: 1px solid #ff4d4d;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 15px;
+            font-weight: bold;
+            color: #ffcc00;
+        }
+
+        .deposit-btn {
+            background: linear-gradient(135deg, #28a745, #1e7e34);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
+        }
+
+        /* Main Offer Banner Container */
+        .banner-section {
+            padding: 15px;
+        }
+
+        .promo-banner {
+            background: linear-gradient(135deg, #800000 0%, #330000 100%);
+            border: 1px solid #ff4d4d;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
+        }
+
+        .promo-banner h2 {
+            color: #ffcc00;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .promo-banner p {
+            font-size: 13px;
+            color: #dddddd;
+        }
+
+        /* Game Grid Layout */
+        .section-title {
+            margin: 20px 15px 10px 15px;
+            font-size: 18px;
+            color: #ff4d4d;
+            border-left: 4px solid #ff0000;
+            padding-left: 10px;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            padding: 0 15px;
+        }
+
+        .game-card {
+            background: linear-gradient(145deg, #1f0303, #110101);
+            border: 1px solid #4a0000;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            border-color: #ff3333;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+        }
+
+        .game-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .game-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+
+        .game-tag {
+            font-size: 11px;
+            background: #ff0000;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+        /* Modal Layout */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-card {
+            background: linear-gradient(180deg, #2b0000 0%, #100000 100%);
+            border: 2px solid #ff3333;
+            border-radius: 20px;
+            padding: 25px;
+            width: 85%;
+            max-width: 350px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
+            animation: popup 0.3s ease-out;
+        }
+
+        @keyframes popup {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-card h2 {
+            color: #ffcc00;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .offer-list {
+            text-align: left;
+            margin: 15px 0;
+            font-size: 14px;
+            background: #1a0000;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #4a0000;
+        }
+
+        .offer-item {
+            margin-bottom: 8px;
+            color: #ffcccc;
+        }
+
+        .claim-btn {
+            background: linear-gradient(135deg, #ff2a2a, #990000);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+        }
+
+        .deposit-input {
+            width: 90%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 1px solid #ff3333;
+            background: #100000;
+            color: #fff;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Automatic Offer Pop-Up -->
+    <div class="modal-overlay" id="offerModal">
+        <div class="modal-card">
+            <h2>🔥 SPECIAL BONUS 🔥</h2>
+            <p>Deposit Bonus Active Today!</p>
+            
+            <div class="offer-list">
+                <div class="offer-item">✔ Deposit ₹100 ➔ Get <b>₹50 Extra</b></div>
+                <div class="offer-item">✔ Deposit ₹500 ➔ Get <b>₹300 Extra</b></div>
+                <div class="offer-item">✔ Deposit ₹1000 ➔ Get <b>₹1000 Extra</b></div>
+            </div>
+
+            <button class="claim-btn" onclick="closeModal()">Claim Bonus & Play</button>
+        </div>
+    </div>
+
+    <!-- Manual Deposit Modal -->
+    <div class="modal-overlay" id="depositModal" style="display: none;">
+        <div class="modal-card">
+            <h2>💳 Deposit Money</h2>
+            <p style="font-size: 13px; color: #ccc;">Scan QR & Submit UTR</p>
+
+            <div style="margin: 15px 0;">
+                <p style="color: #ffcc00; font-size: 14px;">UPI ID: <b>yourupi@paytm</b></p>
+            </div>
+
+            <input type="number" id="depAmount" class="deposit-input" placeholder="Amount (Min ₹100)">
+            <input type="text" id="utrNumber" class="deposit-input" placeholder="12-Digit UTR / Ref No.">
+
+            <button class="claim-btn" style="background: linear-gradient(135deg, #28a745, #1e7e34);" onclick="submitDeposit()">Submit Deposit</button>
+            <button class="claim-btn" style="background: #444; margin-top: 8px;" onclick="closeDepositModal()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Header Navigation -->
+    <div class="header">
+        <div class="logo">VIP GAMING</div>
+        <div class="wallet-container">
+            <div class="wallet-badge">₹<span id="wallet">1000</span></div>
+            <button class="deposit-btn" onclick="openDepositModal()">+ Add</button>
+        </div>
+    </div>
+
+    <!-- Banner -->
+    <div class="banner-section">
+        <div class="promo-banner">
+            <h2>🎁 100% Welcome Bonus</h2>
+            <p>Double your first deposit instantly!</p>
+        </div>
+    </div>
+
+    <!-- Games Section -->
+    <div class="section-title">Popular Games</div>
+
+    <div class="game-grid">
+        <!-- Color Trading Card -->
+        <div class="game-card" onclick="selectGame('Color Trading')">
+            <div class="game-icon">🔴</div>
+            <div class="game-name">Color Trading</div>
+            <span class="game-tag">HOT</span>
+        </div>
+
+        <!-- 7 Up 7 Down Card -->
+        <div class="game-card" onclick="selectGame('7 Up 7 Down')">
+            <div class="game-icon">🎲</div>
+            <div class="game-name">7 Up 7 Down</div>
+            <span class="game-tag">FAST</span>
+        </div>
+
+        <!-- Mines Card -->
+        <div class="game-card" onclick="selectGame('Mines')">
+            <div class="game-icon">💣</div>
+            <div class="game-name">Mines</div>
+            <span class="game-tag">TRENDING</span>
+        </div>
+
+        <!-- Dragon vs Tiger Card -->
+        <div class="game-card" onclick="selectGame('Dragon vs Tiger')">
+            <div class="game-icon">🐉</div>
+            <div class="game-name">Dragon vs Tiger</div>
+            <span class="game-tag">VIP</span>
+        </div>
+    </div>
+
+    <script>
+        function closeModal() {
+            document.getElementById('offerModal').style.display = 'none';
+        }
+
+        function openDepositModal() {
+            document.getElementById('depositModal').style.display = 'flex';
+        }
+
+        function closeDepositModal() {
+            document.getElementById('depositModal').style.display = 'none';
+        }
+
+        function submitDeposit() {
+            let amount = document.getElementById('depAmount').value;
+            let utr = document.getElementById('utrNumber').value;
+
+            if (amount < 100 || utr.length < 6) {
+                alert("Please enter a valid Amount (Min ₹100) and UTR Number!");
+                return;
+            }
+
+            alert("Deposit request for ₹" + amount + " submitted! Pending Admin Approval.");
+            closeDepositModal();
+        }
+
+        function selectGame(gameName) {
+            alert("Entering " + gameName + "...");
+        }
+    </script>
+</body>
+</html>
