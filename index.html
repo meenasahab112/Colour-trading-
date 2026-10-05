@@ -1,346 +1,430 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIP Color Trading</title>
+    <title>Jalwa.Game - Multi Gaming App</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background: #0f172a; color: #fff; max-width: 480px; margin: 0 auto; padding-bottom: 70px; min-height: 100vh; position: relative; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-color: #03081e;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .app-container {
+            width: 100%;
+            max-width: 420px;
+            background-color: #060e2e;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            padding-bottom: 70px;
+        }
+        .header {
+            font-size: 22px;
+            font-weight: bold;
+            color: #00e6a8;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .section {
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+        
+        /* Auth Form Styles */
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .label {
+            color: #00e6a8;
+            font-size: 13px;
+            margin-bottom: 5px;
+            display: block;
+        }
+        .input-box {
+            display: flex;
+            background: #0e1738;
+            border-radius: 8px;
+            padding: 12px;
+        }
+        .input-box select {
+            background: transparent;
+            color: #fff;
+            border: none;
+            margin-right: 8px;
+            outline: none;
+        }
+        .input-box input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #fff;
+            width: 100%;
+            font-size: 14px;
+        }
+        .btn-primary {
+            width: 100%;
+            background: #00e6a8;
+            border: none;
+            padding: 12px;
+            border-radius: 20px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .switch-auth {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 13px;
+            color: #8a99ad;
+        }
+        .switch-auth span {
+            color: #00e6a8;
+            cursor: pointer;
+            font-weight: bold;
+        }
 
-        /* Auth Screen */
-        #authScreen { position: fixed; inset: 0; background: #0f172a; z-index: 2000; padding: 25px; display: flex; flex-direction: column; justify-content: center; max-width: 480px; margin: 0 auto; }
-        .auth-logo { font-size: 28px; font-weight: 900; color: #facc15; margin-bottom: 5px; text-shadow: 0 0 10px rgba(250, 204, 21, 0.3); text-align: center; }
-        .auth-sub { font-size: 13px; color: #94a3b8; margin-bottom: 30px; text-align: center; }
-        .form-group { text-align: left; margin-bottom: 15px; }
-        .form-group label { font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 5px; }
-        .form-input { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid #334155; background: #1e293b; color: #fff; font-size: 15px; outline: none; }
-        .btn-auth { width: 100%; padding: 14px; background: linear-gradient(135deg, #eab308, #ca8a04); border: none; border-radius: 10px; color: #000; font-weight: 800; font-size: 16px; margin-top: 10px; cursor: pointer; box-shadow: 0 4px 15px rgba(234, 179, 8, 0.4); }
+        /* Wallet & Top Banner */
+        .wallet-card {
+            background: #0e1738;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #1a295c;
+        }
+        .wallet-bal {
+            font-size: 22px;
+            color: #00e6a8;
+            font-weight: bold;
+            margin-top: 5px;
+        }
 
-        /* Welcome Modal */
-        #offerModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1500; align-items: center; justify-content: center; padding: 20px; }
-        .offer-card { background: linear-gradient(145deg, #1e293b, #0f172a); border: 2px solid #facc15; border-radius: 20px; padding: 25px; text-align: center; position: relative; max-width: 320px; box-shadow: 0 0 25px rgba(250, 204, 21, 0.3); }
-        .offer-badge { background: #ef4444; color: #fff; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 12px; display: inline-block; margin-bottom: 10px; }
-        .offer-title { font-size: 20px; font-weight: 800; color: #facc15; margin-bottom: 8px; }
-        .offer-desc { font-size: 13px; color: #cbd5e1; margin-bottom: 20px; line-height: 1.4; }
-        .btn-claim { background: #22c55e; color: #fff; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 700; width: 100%; cursor: pointer; font-size: 15px; }
-        .close-offer { position: absolute; top: -12px; right: -12px; background: #ef4444; color: #fff; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; border: 2px solid #fff; }
+        /* Game Categories Tabs */
+        .game-tabs {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+        }
+        .tab-btn {
+            background: #0e1738;
+            color: #8a99ad;
+            padding: 8px 14px;
+            border-radius: 15px;
+            border: none;
+            font-size: 12px;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .tab-btn.active-tab {
+            background: #00e6a8;
+            color: #000;
+            font-weight: bold;
+        }
 
-        /* Header & Wallet */
-        .app-bar { background: #1e293b; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; }
-        .app-title { font-size: 18px; font-weight: 800; color: #facc15; cursor: pointer; }
-        .wallet-card { background: linear-gradient(135deg, #2563eb, #1d4ed8); margin: 15px; padding: 18px; border-radius: 16px; box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3); }
-        .wallet-balance { font-size: 28px; font-weight: 800; margin: 5px 0 15px 0; }
-        .wallet-actions { display: flex; gap: 10px; }
-        .action-btn { flex: 1; padding: 10px; border-radius: 8px; border: none; font-weight: 700; font-size: 14px; cursor: pointer; }
-        .btn-dep { background: #facc15; color: #000; }
-        .btn-with { background: rgba(255,255,255,0.2); color: #fff; }
+        /* Multi Games Grid */
+        .games-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .game-card {
+            background: #0e1738;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #1a295c;
+            cursor: pointer;
+        }
+        .game-icon {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+        .game-title {
+            font-size: 14px;
+            font-weight: bold;
+        }
 
-        /* Games Grid & Arena */
-        .section-title { font-size: 16px; font-weight: 700; color: #facc15; text-align: left; margin: 20px 15px 12px 15px; }
-        .games-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 15px; }
-        .game-card { background: #1e293b; border: 1px solid #334155; border-radius: 14px; padding: 15px; text-align: left; cursor: pointer; position: relative; }
-        .game-icon { font-size: 32px; margin-bottom: 8px; }
-        .game-name { font-size: 15px; font-weight: 800; color: #fff; }
-        .game-sub { font-size: 11px; color: #94a3b8; margin-top: 2px; }
-        .hot-tag { position: absolute; top: 8px; right: 8px; background: #ef4444; color: #fff; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 6px; }
+        /* Color Game Engine UI */
+        .timer-box {
+            background: #0e1738;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .clock {
+            font-size: 24px;
+            color: #ff4d4d;
+            font-weight: bold;
+        }
+        .color-btns {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .color-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .btn-green { background: #00c853; }
+        .btn-violet { background: #9c27b0; }
+        .btn-red { background: #f44336; }
+        .num-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        .num-btn {
+            background: #1a295c;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
 
-        #wingoGame { display: none; padding: 15px; }
-        .timer-box { background: #1e293b; padding: 15px; border-radius: 12px; border: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .color-btns { display: flex; gap: 10px; margin-bottom: 15px; }
-        .c-btn { flex: 1; padding: 14px 0; border-radius: 8px; border: none; font-weight: 800; font-size: 15px; color: #fff; cursor: pointer; }
-        .bg-green { background: #16a34a; }
-        .bg-violet { background: #9333ea; }
-        .bg-red { background: #dc2626; }
-        .number-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
-        .num-btn { background: #0f172a; border: 1px solid #334155; color: #fff; padding: 12px 0; border-radius: 8px; font-weight: 700; font-size: 16px; cursor: pointer; }
+        /* History Table */
+        .history {
+            background: #0e1738;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 12px;
+            text-align: left;
+        }
+        .history-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #1a295c;
+        }
 
-        /* Navigation Bar */
-        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto; background: #1e293b; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #334155; }
-        .nav-item { color: #64748b; font-size: 11px; text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; }
-        .nav-active { color: #facc15; font-weight: 700; }
-
-        /* Modals */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; z-index: 3000; padding: 15px; }
-        .modal-content { background: #1e293b; padding: 20px; border-radius: 16px; width: 100%; max-width: 380px; text-align: left; border: 1px solid #38bdf8; position: relative; }
-        .close { position: absolute; top: 12px; right: 15px; font-size: 22px; color: #94a3b8; cursor: pointer; }
-        .amount-chips { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0; }
-        .chip { background: #0f172a; border: 1px solid #334155; padding: 10px; border-radius: 8px; text-align: center; font-size: 13px; font-weight: 700; color: #facc15; cursor: pointer; }
+        /* Bottom Nav */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #0e1738;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            border-top: 1px solid #1a295c;
+        }
+        .nav-item {
+            color: #8a99ad;
+            font-size: 12px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .nav-item.active-nav {
+            color: #00e6a8;
+        }
     </style>
 </head>
 <body>
 
-    <!-- LOGIN SCREEN -->
-    <div id="authScreen">
-        <div class="auth-logo">💎 VIP COLOR TRADING</div>
-        <div class="auth-sub">Enter Mobile Number to Start Playing</div>
+<div class="app-container">
+
+    <!-- 1. REGISTER SCREEN -->
+    <div id="register-screen" class="section active">
+        <div class="header">Jalwa.Game</div>
         <div class="form-group">
-            <label>Phone Number</label>
-            <input type="tel" id="loginPhone" class="form-input" placeholder="Enter 10-digit Mobile Number">
+            <span class="label">Register your phone</span>
+            <div class="input-box">
+                <select><option>+91</option></select>
+                <input type="tel" id="reg-phone" placeholder="Please enter phone number">
+            </div>
         </div>
         <div class="form-group">
-            <label>Password</label>
-            <input type="password" id="loginPass" class="form-input" placeholder="Enter Password">
+            <span class="label">Set password</span>
+            <div class="input-box"><input type="password" id="reg-pass" placeholder="Set password"></div>
         </div>
-        <button class="btn-auth" onclick="handleAuth()">LOGIN / REGISTER</button>
+        <button class="btn-primary" onclick="showScreen('home-screen')">Register</button>
+        <div class="switch-auth">Already have an account? <span onclick="showScreen('login-screen')">Login</span></div>
     </div>
 
-    <!-- WELCOME OFFER POPUP -->
-    <div id="offerModal">
-        <div class="offer-card">
-            <div class="close-offer" onclick="closeModal('offerModal')">✕</div>
-            <span class="offer-badge">FREE BONUS</span>
-            <div class="offer-title">🎁 VIP Welcome Bonus</div>
-            <div class="offer-desc">Aapke wallet mein ₹100 Demo Cash add ho gaya hai!</div>
-            <button class="btn-claim" onclick="closeModal('offerModal')">PLAY NOW</button>
+    <!-- 2. LOGIN SCREEN -->
+    <div id="login-screen" class="section">
+        <div class="header">Jalwa.Game</div>
+        <div class="form-group">
+            <span class="label">Phone number</span>
+            <div class="input-box">
+                <select><option>+91</option></select>
+                <input type="tel" id="login-phone" placeholder="Enter phone number">
+            </div>
         </div>
+        <div class="form-group">
+            <span class="label">Password</span>
+            <div class="input-box"><input type="password" id="login-pass" placeholder="Enter password"></div>
+        </div>
+        <button class="btn-primary" onclick="showScreen('home-screen')">Login</button>
+        <div class="switch-auth">Don't have an account? <span onclick="showScreen('register-screen')">Register</span></div>
     </div>
 
-    <!-- MAIN LOBBY -->
-    <div id="mainLobby" style="display:none;">
-        <div class="app-bar">
-            <!-- Secret Admin Trigger: Title par 3 baar click karein -->
-            <div class="app-title" onclick="adminClickTrigger()">💎 VIP COLOR TRADING</div>
-            <div style="font-size:12px; color:#94a3b8;" id="userPhoneDisplay">ID: --</div>
-        </div>
-
+    <!-- 3. MAIN DASHBOARD / MULTI GAMES HOME -->
+    <div id="home-screen" class="section">
+        <div class="header">Jalwa.Game</div>
+        
         <div class="wallet-card">
-            <div style="font-size:12px; opacity:0.8;">Wallet Balance (Demo)</div>
-            <div class="wallet-balance">₹<span id="userBalance">100.00</span></div>
-            <div class="wallet-actions">
-                <button class="action-btn btn-dep" onclick="openModal('depositModal')">+ Deposit</button>
-                <button class="action-btn btn-with" onclick="alert('Minimum Withdrawal ₹110')">Withdraw</button>
-            </div>
+            <div style="font-size: 12px; color: #8a99ad;">Total Balance</div>
+            <div class="wallet-bal">₹ <span id="balance">1000.00</span></div>
         </div>
 
-        <!-- SECRET ADMIN PANEL -->
-        <div id="adminPanel" style="display:none; margin:15px; padding:15px; background:#0284c7; border-radius:12px; border:2px solid #38bdf8;">
-            <div style="font-weight:bold; color:#fff; font-size:14px; margin-bottom:8px;">⚙️ Admin Result Controller</div>
-            <div style="font-size:11px; margin-bottom:10px;">Set Next Winning Number (0-9):</div>
-            <input type="number" id="adminNextResult" placeholder="Enter 0-9" style="width:100%; padding:8px; border-radius:6px; border:none; text-align:center; font-weight:bold;">
-            <button onclick="setAdminControl()" style="width:100%; margin-top:8px; padding:8px; background:#facc15; color:#000; border:none; font-weight:bold; border-radius:6px; cursor:pointer;">Set Forced Result</button>
+        <div class="game-tabs">
+            <button class="tab-btn active-tab">All Games</button>
+            <button class="tab-btn">Popular</button>
+            <button class="tab-btn">Lottery</button>
+            <button class="tab-btn">Slots</button>
+            <button class="tab-btn">Casino</button>
         </div>
 
-        <!-- GAMES GRID -->
-        <div id="gamesSection">
-            <div class="section-title">🔥 Popular Games</div>
-            <div class="games-grid">
-                <div class="game-card" onclick="openGame('wingo')">
-                    <span class="hot-tag">HOT</span>
-                    <div class="game-icon">🎨</div>
-                    <div class="game-name">Win Go 1Min</div>
-                    <div class="game-sub">Guess Color & Number</div>
-                </div>
+        <!-- Multi Games Grid -->
+        <div class="games-grid">
+            <div class="game-card" onclick="showScreen('wingo-game')">
+                <div class="game-icon">🎨</div>
+                <div class="game-title">WinGo 1Min</div>
             </div>
-        </div>
-
-        <!-- WINGO GAME -->
-        <div id="wingoGame">
-            <button onclick="backToLobby()" style="background:#334155; color:#fff; border:none; padding:8px 15px; border-radius:6px; font-size:12px; margin-bottom:15px; cursor:pointer;">← Back to Lobby</button>
-            
-            <div class="timer-box">
-                <div>
-                    <div style="font-size:12px; color:#94a3b8;">Win Go 1Min</div>
-                    <div style="font-size:15px; font-weight:700; color:#38bdf8;" id="periodId">20261002001</div>
-                </div>
-                <div style="text-align:right;">
-                    <div style="font-size:12px; color:#94a3b8;">Time Remaining</div>
-                    <div style="font-size:20px; font-weight:800; color:#facc15; font-family:monospace;" id="timer">00:60</div>
-                </div>
+            <div class="game-card" onclick="alert('Aviator Game Opening...')">
+                <div class="game-icon">🚀</div>
+                <div class="game-title">Aviator</div>
             </div>
-
-            <div class="color-btns">
-                <button class="c-btn bg-green" onclick="placeBet('Green')">Green</button>
-                <button class="c-btn bg-violet" onclick="placeBet('Violet')">Violet</button>
-                <button class="c-btn bg-red" onclick="placeBet('Red')">Red</button>
+            <div class="game-card" onclick="alert('TRX Hash Opening...')">
+                <div class="game-icon">💎</div>
+                <div class="game-title">TRX Win</div>
             </div>
-
-            <div class="number-grid">
-                <button class="num-btn" style="color:#a855f7;" onclick="placeBet('0')">0</button>
-                <button class="num-btn" style="color:#22c55e;" onclick="placeBet('1')">1</button>
-                <button class="num-btn" style="color:#ef4444;" onclick="placeBet('2')">2</button>
-                <button class="num-btn" style="color:#22c55e;" onclick="placeBet('3')">3</button>
-                <button class="num-btn" style="color:#ef4444;" onclick="placeBet('4')">4</button>
-                <button class="num-btn" style="color:#a855f7;" onclick="placeBet('5')">5</button>
-                <button class="num-btn" style="color:#ef4444;" onclick="placeBet('6')">6</button>
-                <button class="num-btn" style="color:#22c55e;" onclick="placeBet('7')">7</button>
-                <button class="num-btn" style="color:#ef4444;" onclick="placeBet('8')">8</button>
-                <button class="num-btn" style="color:#22c55e;" onclick="placeBet('9')">9</button>
+            <div class="game-card" onclick="alert('Fishing Game Opening...')">
+                <div class="game-icon">🎣</div>
+                <div class="game-title">Fishing Pro</div>
             </div>
-
-            <!-- BET HISTORY -->
-            <div style="margin-top: 20px; background: #1e293b; padding: 12px; border-radius: 10px; border: 1px solid #334155;">
-                <div style="font-size:14px; font-weight:700; color:#facc15; margin-bottom:10px; text-align:left;">📜 Game History</div>
-                <table style="width:100%; text-align:center; font-size:12px; color:#cbd5e1; border-collapse:collapse;">
-                    <thead>
-                        <tr style="border-bottom: 1px solid #334155; color:#94a3b8;">
-                            <th style="padding:6px;">Select</th>
-                            <th>Result</th>
-                            <th>Amount</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="historyList">
-                        <tr><td colspan="4" style="padding:10px; color:#64748b;">No bets placed yet</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="nav-bar">
-            <div class="nav-item nav-active" onclick="backToLobby()">🎮<span>Games</span></div>
-            <div class="nav-item" onclick="openModal('depositModal')">💰<span>Deposit</span></div>
         </div>
     </div>
 
-    <!-- DEPOSIT MODAL -->
-    <div id="depositModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('depositModal')">&times;</span>
-            <h3 style="color:#38bdf8; font-size:18px; margin-bottom:5px;">Deposit Cash (Demo)</h3>
-            <div style="margin-top:12px;">
-                <label style="font-size:12px; color:#cbd5e1;">Deposit Amount (₹):</label>
-                <input type="number" id="depositAmount" value="500" style="width:100%; padding:10px; border-radius:8px; border:1px solid #334155; background:#0f172a; color:#4ade80; font-size:18px; font-weight:800; text-align:center; margin-top:5px;">
+    <!-- 4. COLOR TRADING / WINGO GAME SCREEN -->
+    <div id="wingo-game" class="section">
+        <div class="header" style="display:flex; justify-content:space-between; align-items:center;">
+            <span onclick="showScreen('home-screen')" style="cursor:pointer; font-size:16px;">◀ Back</span>
+            <span>WinGo 1Min</span>
+            <span></span>
+        </div>
+
+        <div class="timer-box">
+            <div>
+                <div style="font-size: 12px; color: #8a99ad;">Period</div>
+                <div style="font-size: 14px; font-weight: bold;" id="period-num">20261005001</div>
             </div>
-            <div class="amount-chips">
-                <div class="chip" onclick="setAmount(100)">₹100</div>
-                <div class="chip" onclick="setAmount(500)">₹500</div>
-                <div class="chip" onclick="setAmount(1000)">₹1000</div>
+            <div class="clock" id="timer">00:30</div>
+        </div>
+
+        <div class="color-btns">
+            <button class="color-btn btn-green" onclick="placeBet('Green')">Green</button>
+            <button class="color-btn btn-violet" onclick="placeBet('Violet')">Violet</button>
+            <button class="color-btn btn-red" onclick="placeBet('Red')">Red</button>
+        </div>
+
+        <div class="num-grid">
+            <button class="num-btn" onclick="placeBet('0')">0</button>
+            <button class="num-btn" onclick="placeBet('1')">1</button>
+            <button class="num-btn" onclick="placeBet('2')">2</button>
+            <button class="num-btn" onclick="placeBet('3')">3</button>
+            <button class="num-btn" onclick="placeBet('4')">4</button>
+            <button class="num-btn" onclick="placeBet('5')">5</button>
+            <button class="num-btn" onclick="placeBet('6')">6</button>
+            <button class="num-btn" onclick="placeBet('7')">7</button>
+            <button class="num-btn" onclick="placeBet('8')">8</button>
+            <button class="num-btn" onclick="placeBet('9')">9</button>
+        </div>
+
+        <div class="history">
+            <div style="font-weight: bold; margin-bottom: 8px;">Game History</div>
+            <div id="history-list">
+                <div class="history-row"><span>20261005000</span><span>Number: 7</span><span style="color:#00c853;">Green</span></div>
             </div>
-            <input type="number" id="utrInput" placeholder="Enter 12-Digit UTR No." style="width:100%; padding:10px; border-radius:8px; border:1px solid #334155; background:#0f172a; color:#fff; text-align:center; margin:10px 0;">
-            <button class="btn-auth" style="margin-top:0;" onclick="submitDeposit()">SUBMIT DEMO DEPOSIT</button>
         </div>
     </div>
 
-    <script>
-        let currentUser = { phone: "", balance: 100.00 };
-        let currentBet = null;
-        let myHistory = [];
-        let forcedResult = null;
-        let adminClicks = 0;
+    <!-- Bottom Navigation Bar -->
+    <div class="bottom-nav">
+        <div class="nav-item active-nav" onclick="showScreen('home-screen')">Home</div>
+        <div class="nav-item" onclick="showScreen('wingo-game')">Activity</div>
+        <div class="nav-item" onclick="alert('Wallet Area')">Wallet</div>
+        <div class="nav-item" onclick="showScreen('login-screen')">Account</div>
+    </div>
 
-        function handleAuth() {
-            let phone = document.getElementById('loginPhone').value.trim();
-            let pass = document.getElementById('loginPass').value.trim();
+</div>
 
-            if (phone.length < 10 || pass === '') {
-                alert('Please enter a valid 10-digit Phone Number and Password');
-                return;
-            }
+<script>
+    // Screen Switcher Function
+    function showScreen(screenId) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+    }
 
-            currentUser.phone = phone;
-            
-            // Check if user exists in LocalStorage
-            let savedUser = localStorage.getItem('user_' + phone);
-            if (savedUser) {
-                currentUser = JSON.parse(savedUser);
-            } else {
-                currentUser = { phone: phone, balance: 100.00 };
-                localStorage.setItem('user_' + phone, JSON.stringify(currentUser));
-            }
-
-            document.getElementById('authScreen').style.display = 'none';
-            document.getElementById('mainLobby').style.display = 'block';
-            document.getElementById('offerModal').style.display = 'flex';
-            document.getElementById('userPhoneDisplay').innerText = 'ID: ' + phone.substring(0, 2) + '****' + phone.substring(6);
-            updateBalanceUI();
+    // Live Game Timer (30-Sec Countdown)
+    let timeLeft = 30;
+    let period = 20261005001;
+    setInterval(() => {
+        timeLeft--;
+        if (timeLeft < 0) {
+            timeLeft = 30;
+            period++;
+            document.getElementById('period-num').textContent = period;
+            generateResult();
         }
+        let sec = timeLeft < 10 ? '0' + timeLeft : timeLeft;
+        document.getElementById('timer').textContent = `00:${sec}`;
+    }, 1000);
 
-        function updateBalanceUI() {
-            document.getElementById('userBalance').innerText = parseFloat(currentUser.balance).toFixed(2);
-            if(currentUser.phone) {
-                localStorage.setItem('user_' + currentUser.phone, JSON.stringify(currentUser));
-            }
+    // Bet Placement Function
+    function placeBet(type) {
+        let bal = document.getElementById('balance');
+        let currentBal = parseFloat(bal.textContent);
+        if (currentBal >= 10) {
+            bal.textContent = (currentBal - 10).toFixed(2);
+            alert(`Bet placed on ${type} for ₹10!`);
+        } else {
+            alert('Insufficient balance!');
         }
+    }
 
-        function openGame(gameType) {
-            if(gameType === 'wingo') {
-                document.getElementById('gamesSection').style.display = 'none';
-                document.getElementById('wingoGame').style.display = 'block';
-            }
-        }
+    // Auto Result Generator Function
+    function generateResult() {
+        const colors = ['Green', 'Red', 'Violet'];
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        const randomNumber = Math.floor(Math.random() * 10);
+        
+        const historyList = document.getElementById('history-list');
+        const newRow = document.createElement('div');
+        newRow.className = 'history-row';
+        newRow.innerHTML = `<span>${period - 1}</span><span>Number: ${randomNumber}</span><span>${randomColor}</span>`;
+        historyList.prepend(newRow);
+    }
+</script>
 
-        function backToLobby() {
-            document.getElementById('wingoGame').style.display = 'none';
-            document.getElementById('gamesSection').style.display = 'block';
-        }
-
-        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function setAmount(amt) { document.getElementById('depositAmount').value = amt; }
-
-        function submitDeposit() {
-            let amt = parseFloat(document.getElementById('depositAmount').value);
-            let utr = document.getElementById('utrInput').value;
-            if(!utr || utr.length < 6) {
-                alert("Please enter a valid Transaction/UTR Number");
-                return;
-            }
-            currentUser.balance += amt;
-            updateBalanceUI();
-            alert(`Demo Deposit of ₹${amt} Successful!`);
-            closeModal('depositModal');
-        }
-
-        function placeBet(val) {
-            let betAmount = 10;
-            if (currentUser.balance < betAmount) {
-                alert('Insufficient Balance!');
-                openModal('depositModal');
-                return;
-            }
-
-            currentUser.balance -= betAmount;
-            updateBalanceUI();
-            currentBet = { selection: val, amount: betAmount };
-            alert(`Bet Placed: ₹${betAmount} on ${val}`);
-        }
-
-        // Timer Logic (1 Minute Game)
-        let timeLeft = 60;
-        setInterval(() => {
-            timeLeft--;
-            if (timeLeft <= 0) {
-                timeLeft = 60;
-                calculateWinner();
-            }
-            let sec = timeLeft < 10 ? "0" + timeLeft : timeLeft;
-            document.getElementById('timer').innerText = "00:" + sec;
-        }, 1000);
-
-        function calculateWinner() {
-            if (!currentBet) return;
-
-            let winNum = (forcedResult !== null) ? forcedResult : Math.floor(Math.random() * 10);
-            forcedResult = null;
-            document.getElementById('adminNextResult').value = '';
-
-            let winColor = [1, 3, 7, 9].includes(winNum) ? 'Green' : ([2, 4, 6, 8].includes(winNum) ? 'Red' : 'Violet');
-            let isWin = (currentBet.selection == winNum.toString()) || (currentBet.selection === winColor);
-
-            if (isWin) {
-                let winAmount = currentBet.amount * 2;
-                currentUser.balance += winAmount;
-                updateBalanceUI();
-            }
-
-            let statusText = isWin ? `<span style="color:#22c55e; font-weight:bold;">WIN</span>` : `<span style="color:#ef4444; font-weight:bold;">LOSS</span>`;
-
-            myHistory.unshift({
-                select: currentBet.selection,
-                res: `${winNum} (${winColor})`,
-                amt: `₹${currentBet.amount}`,
-                status: statusText
-            });
-
-            renderHistory();
-            currentBet = null;
-        }
-
-        function renderHistory() {
-            let tbody = document.getElementById('historyList');
-            tbody.innerHTML = '';
-            myHistory.forEach(item => {
-                tbody.innerHTML += `
-                    <tr style="border-bottom: 1px solid #1e293b;">
-            
+</body>
+</html>
+    
